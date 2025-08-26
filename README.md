@@ -5,9 +5,7 @@ Features
 2. Create Quiz via AI
 3. Access By Admin
 4. Admin Download Report of the Students
-5. Access the Student Activity.
-![Uploading image.png…]()
-![Uploading WhatsApp Image 2025-08-26 at 12.26.50.jpeg…]()
+5. Access the Student Activity
 
 ![Uploading Screenshot 2025-08-26 at 12.10.12 PM.png…]()
 ![Uploading Screenshot 2025-08-26 at 12.12.18 PM.png…]()
