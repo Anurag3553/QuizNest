@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizNest</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.min.js">
+  <script>
+    let questionCount = 0;
+
+    function addQuestion() {
+      const questionContainer = document.getElementById("questions-container");
+
+      const questionDiv = document.createElement("div");
+      questionDiv.className = "question";
+      questionDiv.setAttribute("data-question", questionCount);
+
+      questionDiv.innerHTML = `
+        <label style="margin-left: 20px; color:#667eea; "><b>Question ${questionCount + 1}</b></label>
+          <button class="delete" type="button" onclick="removeQuestion(this, questionCount--)" style="width: 100px; border: 2px solid red; background-color: rgb(255, 0, 0); color: white; font-size: 1rem;">Delete</button> <br>    
+        <label style="margin-left: 20px;" >Question Text:</label><br>
+        <input style="width: 95%; margin-left: 15px;" type="text" name="quiz[questions][${questionCount}][questionText]" required>
+       <div class="admin-two">
+        <div class="options-container" id="options-${questionCount}">
+          <label style="margin-left : 10px;" >Options:</label>
+        </div>
+        <button style="margin-bottom: 30px; margin-left: 20px; height: 30px; width: 130px; border: 1px solid green; background-color: green; color: white; " type="button" onclick="addOption(${questionCount})">Add Option</button>
+       </div>
+       <hr style="margin-bottom: 20px">
+      `;
+      questionContainer.appendChild(questionDiv);
+      addOption(questionCount); // Add initial option
+      questionCount++;
+
+    }
+
+    function removeQuestion(btn) {
+      btn.parentNode.remove();
+    }
+
+    function addOption(questionIndex) {
+      const optionsContainer = document.getElementById(`options-${questionIndex}`);
+      const optionCount = optionsContainer.children.length;
+
+      const optionDiv = document.createElement("div");
+      optionDiv.innerHTML = `
+      <div class="admin-three">
+        <input style="margin-left : 20px; margin-bottom: 30px;" type="text" name="quiz[questions][${questionIndex}][options][${optionCount}][text]" required>
+        <div class="iscrt">
+          <label style="margin-top: -23px;">Is Correct?</label>  
+          <input style="margin-left: 10px; margin-top: -23px;" type="checkbox" name="quiz[questions][${questionIndex}][options][${optionCount}][isCorrect]">
+        </div>
+          <button style="margin-left: 10px; margin-top: -23px; height: 30px;  width: 100px; border: 1px solid red;  background-color: red; color: white; font-size: 1rem;" type="button" onclick="this.parentNode.remove()">Remove</button><br>
+      </div>
+      `;
+      optionsContainer.appendChild(optionDiv);
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="contain">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <i class="fas fa-brain"></i>
+          <span>QuizNest</span>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="/admin" class="nav-link active">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/createquiz" class="nav-link">Create Quizzes</a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/dashboard" class="nav-link">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/generatequiz" class="nav-link">Generate with AI</a>
+          </li>
+          <li class="nav-item">
+            <a href="/home" class="nav-link stu-dash-log">Logout</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+    <div class="main-container">
+      <div class="admin-content1">
+        <h2>Create New Quiz</h2>
+      </div>
+
+      <div class="admin-content2">
+        <div class="quiz-detail">
+          <form action="/admin/createquiz" method="POST">
+            <label>Quiz Name:</label>
+            <input type="text" name="quiz[quizName]" required><br>
+
+            <label>Subject:</label>
+            <input type="text" name="quiz[subject]" required><br>
+
+            <label>Points:</label>
+            <input type="number" name="quiz[points]" required><br>
+
+            <label>Time Limit (in minutes):</label>
+            <input type="number" name="quiz[timeLimit]" required><br>
+
+            <label>Number of Questions:</label>
+            <input type="number" name="quiz[noOfQuestions]" required><br>
+            <label>Description:</label>
+            <textarea name="quiz[description]" rows="4" cols="50"></textarea><br><br>
+            <div class="admin-ques">
+              <h2>Questions</h2>
+              <div id="questions-container"></div>
+              <div class="add-q">
+                <button type="button" onclick="addQuestion()">Add Question</button><br>
+              </div>
+            </div>
+            <div class="crt-btn">
+              <button class="sub-btn" type="submit"><i class="fa-solid fa-file"></i> Submit Quiz</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      setupMobileMenu();
+    });
+
+    function setupMobileMenu() {
+      const hamburger = document.querySelector('.hamburger');
+      const navMenu = document.querySelector('.nav-menu');
+
+      if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+          hamburger.classList.toggle('active');
+          navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+          });
+        });
+      }
+    }
+
+    (() => {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script>
+</body>
+
+</html>

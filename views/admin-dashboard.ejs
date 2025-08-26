@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizNest</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="contain">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-brain"></i>
+                    <span>QuizNest</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/admin" class="nav-link active" onclick="showSection('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/createquiz" class="nav-link" onclick="showSection('quizzes')">Create Quizzes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/dashboard" class="nav-link" onclick="showSection('dashboard')">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/generatequiz" class="nav-link" onclick="showSection('admin')">Generate with AI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a    href="/home" class="nav-link stu-dash-log" onclick="showSection('admin')">Logout</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+        <div class="main-container">
+            <div class="content1">
+                <h2>Created Quizzes</h2>
+                <div class="quiz-select">
+                    <select id="categoryFilter" onchange="filterQuizzes()">
+                        <option value="" selected>All subjects%></option>
+                        <% for(let quiz of allquiz) { %>
+                            <option value="<%= quiz.subject%>">
+                                <%= quiz.subject%>
+                            </option>
+                            <%}%>
+                    </select>
+                </div>
+            </div>
+            <div class="content2">
+                <% for(let quiz of allquiz) { %>
+                    <div class="card">
+                        <div class="one">
+                            <h3>
+                                <%= quiz.subject%>
+                            </h3>
+                        </div>
+                        <div class="two">
+                            <p>
+                                <%= quiz.quizName%>
+                            </p>
+                        </div>
+                        <div class="three">
+                            <div class="ques">
+                                <p>
+                                    <%= quiz.noOfQuestions%>
+                                </p>
+                                <p>Questions</p>
+                            </div>
+                            <div class="ques">
+                                <p>
+                                    <%= quiz.timeLimit%>
+                                </p>
+                                <p>min</p>
+                            </div>
+                            <div class="ques">
+                                <p>
+                                    <%= quiz.noOfQuestions%>
+                                </p>
+                                <p>Attempts</p>
+                            </div>
+                        </div>
+                        <div class="four">
+                            <p><i>Test your <%= quiz.subject%> with this challenging quiz!</i></p>
+                        </div>
+                        <div class="quiz-strt">
+                            <form action="/admin/dashboard/<%= quiz._id %> ">
+                                <button>Review Quiz</button>
+                            </form>
+                            <form method="post" action="/admin/dashboard/<%=quiz._id%>?_method=DELETE"
+                                onclick="return confirm('Are you sure you want to Delete?')">
+                                <button style="margin-left: 10px;">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <%}%>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setupMobileMenu();
+        });
+
+        function setupMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                // Close menu when clicking on a link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

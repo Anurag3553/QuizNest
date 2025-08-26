@@ -1,0 +1,191 @@
+<!-- views/Listings/genAi.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Quiz with AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 95%;
+            box-sizing: border-box;
+            margin: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #475569;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #1e293b;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #6366f1;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+        }
+
+        .submit-button {
+            background-color: #6366f1;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        .submit-button:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .result-container h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: #1e293b;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 0.875rem;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Generate Quiz with AI</h1>
+        <p class="subtitle">Enter the details below and the AI will create a quiz for you!</p>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/admin/generatequiz/ask" method="POST" class="quiz-form">
+            <div class="form-group">
+                <label for="quizName">Quiz Name:</label>
+                <input type="text" id="quizName" name="quizName" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="noOfQuestions">No. of Questions:</label>
+                <input type="number" id="noOfQuestions" name="noOfQuestions" min="1" max="20" value="5" required>
+            </div>
+            <div class="form-group">
+                <label for="noOfOptions">No. of Options per Question:</label>
+                <input type="number" id="noOfOptions" name="noOfOptions" min="2" max="5" value="4" required>
+            </div>
+            <div class="form-group">
+                <label for="points">Points per Question (optional):</label>
+                <input type="number" id="points" name="points" min="1" value="10">
+            </div>
+            <div class="form-group">
+                <label for="timeLimit">Time Limit (in minutes, optional):</label>
+                <input type="number" id="timeLimit" name="timeLimit" min="1" value="15">
+            </div>
+            <div class="form-group">
+                <label for="description">Description (optional):</label>
+                <textarea id="description" name="description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="submit-button">Generate Quiz</button>
+        </form>
+
+        <% if (quiz) { %>
+            <div class="result-container">
+                <h3>Successfully Generated Quiz: <%= quiz.quizName %></h3>
+                <form action="/admin/dashboard">
+                  <button>GO to Dashboard</button>
+                </form>
+                <!-- <pre class="code-block"><%= JSON.stringify(quiz, null, 2) %></pre> -->
+            </div>
+        <% } %>
+        
+    </div>
+</body>
+</html>

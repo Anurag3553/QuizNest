@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<style>
+    @media (max-width: 768px) {
+        .contain .head {
+            height: 70px;
+            width: 100%;
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            padding: 0 1rem;
+            flex-wrap: wrap;
+            /* allow wrapping on small screens */
+        }
+
+        .head .logo {
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex: 1 1 auto;
+        }
+
+        .head .logo i {
+            margin-right: 10px;
+        }
+
+        .head .mid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: white;
+            flex: 2 1 auto;
+            flex-wrap: wrap;
+        }
+
+        .mid a {
+            text-decoration: none;
+            font-size: 1rem;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .head .right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 auto;
+        }
+
+        .right button {
+            background-color: rgb(246, 239, 239);
+            border: 2px solid red;
+            color: red;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+        }
+
+        .right button:hover {
+            background-color: red;
+            color: white;
+        }
+
+        .right i {
+            margin-left: 10px;
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        .resu-container1 {
+            max-width: 800px;
+            /* Keep a fixed width look */
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+    }
+
+    @media screen and (max-width: 768px) {
+        .resu-container1 .one h2 {
+            font-size: 24px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .resu-container1 .two {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resu-container1 .circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            /* background: #f4f4f4; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .resu-container1 .score {
+            font-size: 16px;
+        }
+
+        .resu-container1 .three {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 14px;
+        }
+    }
+</style>
+
+<body>
+    <div class="resu-contain">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-brain"></i>
+                    <span>QuizNest</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/home/dashboard" class="nav-link active" onclick="showSection('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home/dashboard/quizzes" class="nav-link" onclick="showSection('quizzes')">Quizzes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home/dashboard/stu-dashboard" class="nav-link"
+                            onclick="showSection('dashboard')">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home" class="nav-link stu-dash-log" onclick="showSection('admin')">Logout</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+        <div class="resu-container1">
+            <div class="one">
+                <h2>
+                    <%= quiz.quizName %> - Results
+                </h2>
+            </div>
+
+            <div class="two">
+                <div class="circle">
+                    <p><strong>Score:</strong>
+                        <%= totalScore %>
+                    </p>
+                </div>
+                <div class="score">
+                    <p>You scored <%= correctCount %> out of <%= totalQuestions %>
+                    </p>
+                </div>
+            </div>
+
+            <div class="three">
+                <p><i style="color: orange;" class="fa-solid fa-globe"></i><strong>Total Questions:</strong>
+                    <%= totalQuestions %>
+                </p>
+                <p><i style="color: green;" class="fa-solid fa-square-check"></i><strong>Correct Answers:</strong>
+                    <%= correctCount %>
+                </p>
+                <p><i style="color: red;" class="fa-solid fa-square-xmark"></i><strong>Incorrect Answers:</strong>
+                    <%= incorrectCount %>
+                </p>
+            </div>
+        </div>
+
+        <div class="resu-container2">
+            <div class="resu-card">
+                <h4>Question Review</h4>
+                <% results.forEach((r, i)=> {%>
+                    <div class="result">
+                        <p><b>Question <%= i + 1 %>: </b> <br>
+                            <b>
+                                <%= r.questionText %>
+                            </b>
+                        </p>
+                        <p>Your answer: <%= r.selected || "No answer selected" %>
+                        </p>
+                        <p>Correct Answer : <%= r.correct%>
+                        </p>
+                        <p>
+                            <% if (r.isCorrect) {%>
+                                ✅ Correct!
+                                <% } else { %>
+                                    <p>❌ Incorrect. </p>
+                                    <% } %>
+                        </p>
+                    </div>
+                    <% }) %>
+                        <div class="res-btn">
+                            <form action="/home/dashboard/quizzes">
+                                <button>GO TO DASHBOARD</button>
+                            </form>
+                        </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setupMobileMenu();
+        });
+
+        function setupMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                // Close menu when clicking on a link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

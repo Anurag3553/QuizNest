@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dash-contain">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-brain"></i>
+                    <span>QuizNest</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/admin" class="nav-link active" onclick="showSection('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/createquiz" class="nav-link" onclick="showSection('quizzes')">Create Quizzes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/dashboard" class="nav-link" onclick="showSection('dashboard')">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/generatequiz" class="nav-link" onclick="showSection('admin')">Generate with AI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home" class="nav-link stu-dash-log" onclick="showSection('admin')">Logout</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+        <div class="dash-content1">
+            <h2>Review Quiz</h2>
+        </div>
+        <div class="dash-content2">
+            <div class="quiz-revi-dash">
+                <div class="one">
+                    <p><i class="fa-solid fa-list"></i> Live Quiz</p>
+                </div>
+                <div class="two">
+                    <div class="dash-card">
+                        <div class="logo">
+                            <i class="fa-solid fa-gauge"></i>
+                        </div>
+                        <div class="dash-data">
+                            <p style="color: gray;">Accuracy</p>
+                            <p><b>100% </b><i style="color: green; font-size: 1.2rem;"
+                                    class="fa-solid fa-arrow-trend-up"></i></p>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="logo">
+                            <i class="fa-solid fa-percent"></i>
+                        </div>
+                        <div class="dash-data">
+                            <p style="color: gray;">Completions Rate</p>
+                            <p><b>100% </b></p>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="logo">
+                            <i class="fa-solid fa-person"></i>
+                        </div>
+                        <div class="dash-data">
+                            <p style="color: gray;">Total Students</p>
+                            <p><b>2</b></p>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="logo">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </div>
+                        <div class="dash-data">
+                            <p style="color: gray;">Questions</p>
+                            <p><b>
+                                    <%= aquiz.noOfQuestions%>
+                                </b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="three">
+                    <div class="view-btn">
+                        <form action="/admin/dashboard">
+                            <button>View Quiz</button>
+                        </form>
+                    </div>
+                    <div class="right">
+                        <div class="r-left">
+                            <a href="#"><i class="fa-solid fa-trash"></i></a>
+                            <a href="#"><i class="fa-solid fa-print"></i></a>
+                            <a href="#"><i class="fa-solid fa-download"></i></a>
+                        </div>
+                        <div class="line"></div>
+                        <div class="sec-right">
+                            <button><i style="font-size: 14px;" class="fa-solid fa-envelope"></i> Email Parents</button>
+                            <button><i style="font-size: 14px;" class="fa-solid fa-share-from-square"></i> Share
+                                Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dash-content3">
+            <div class="dash-quiz-card">
+                <div class="one">
+                    <div class="left">
+                        <h3>
+                            <%= aquiz.quizName%>
+                        </h3>
+                    </div>
+
+                    <div class="right">
+                        <button>show Participants</button>
+                    </div>
+                </div>
+                <div class="two">
+                    <div class="top">
+                        <h4>
+                            <%= aquiz.subject%>
+                        </h4>
+                    </div>
+                    <div class="mid">
+                        <div class="box">
+                            <i style="margin-right: 10px;" class="fa-solid fa-circle-question"></i>
+                            <p style="margin-right: 10px;">
+                                <%= aquiz.noOfQuestions%>
+                            </p>
+                            <p>Questions</p>
+                        </div>
+                        <div class="box">
+                            <i style="margin-right: 10px;" class="fa-solid fa-timeline"></i>
+                            <p style="margin-right: 10px;">
+                                <%= aquiz.timeLimit%>
+                            </p>
+                            <p>minutes</p>
+                        </div>
+                        <div class="box">
+                            <i style="margin-right: 10px;" class="fa-solid fa-check"></i>
+                            <p style="margin-right: 10px;">
+                                <%= aquiz.noOfQuestions%>
+                            </p>
+                            <p>Attempts</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="three">
+                    <form method="get" action="/admin/dashboard/<%=aquiz._id%>/edit">
+                        <button>Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setupMobileMenu();
+        });
+
+        function setupMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                // Close menu when clicking on a link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
